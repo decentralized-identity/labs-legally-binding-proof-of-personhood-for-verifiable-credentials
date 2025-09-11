@@ -134,6 +134,46 @@ Verification MUST fail if any binding check mismatches.
 
 ## Examples
 
+### Usecase Sequence Diagram
+
+```mermaid
+sequenceDiagram
+    participant Alice as Alice (User/Holder)
+    participant Platform as Signing Platform (VC supporting)
+    participant QESProvider as QTSP (e.g., eIDAS)
+    participant Verifier as Verifier (Optional)
+
+    Note over Alice,Platform: Alice needs to sign an uploaded document on the platform
+
+    Alice->>Platform: Access platform and upload document (e.g., PDF)
+    Platform->>Alice: Confirm upload and present document for review
+    Platform->>Alice: Request KYC verification and document signature
+
+    Note over Alice: Alice uses QES for KYC and signing the document
+
+    Platform->>QESProvider: Request QES issuance/activation (with KYC hash/confirmation)
+    QESProvider->>Alice: Provide QES certificate and signing capability (confirms KYC level)
+
+    Platform->>Platform: Compute digest of uploaded document
+    Platform->>QESProvider: Sign challenge (document digest) using QES
+    QESProvider->>Platform: Return QES-signed challenge (detached signature)
+
+    Note over Alice,Platform: Original VC Issuance
+    Platform->>Alice: Issues VC of Document Signing backed by QES
+
+    Note over Alice,Platform: QES-VC Issuance
+    Platform->>Platform: Compute digest of Original VC
+    Platform->>QESProvider: Sign challenge (Original VC digest) using QES
+    Platform->>Platform: Wrap QES artifact in privacy layer (SD-JWT or ZKP)<br>Asserting KYC and binding to document
+    Platform->>Alice: Confirms process complete and issues resulting QES VC
+
+    opt Future Verification
+        Platform->>Verifier: Share resulting VC
+        Verifier->>Verifier: Perform verification workflow
+        Verifier->>Platform: Confirmation
+    end
+```
+
 ### Basic Binding Example (Non-Normative)
 
 Consider a VC asserting a degree. The holder creates a QES signing the VC digest, wraps it in SD-JWT, and issues a Binding Credential referencing both for presentation to an employer.
