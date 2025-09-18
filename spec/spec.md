@@ -1,19 +1,19 @@
 # Legally-Binding Proof of Personhood for Verifiable Credentials via QES
 
-::: warning Warning Notice
+::: warning
   FIRST, VERY ROUGH DRAFT.
 :::
 
 
 ## Abstract
 
-This specification defines a mechanism for creating legally binding Verifiable Credentials (VCs) by binding them to Qualified Electronic Signatures (QES) under frameworks such as eIDAS 2.0. The approach utilizes a one-way cryptographic binding where the QES signs a digest of the VC as a challenge, ensuring the signer's verified identity (e.g., via KYC processes) is tied to the VC content without modifying the original VC. A new "Binding Credential" (a VC) serves as the umbrella structure, referencing the original VC and the QES-wrapped artifact via integrity-protected properties, enabling reusability, privacy-preserving measures through Selective Disclosure JSON Web Tokens (SD-JWT) or Zero-Knowledge Proofs (ZKPs), and offline-compatible verification.
+This specification defines a mechanism for creating legally binding Verifiable Credentials (VCs)[^verifiable-credential] by binding them to Qualified Electronic Signatures (QES)[^qualified-electronic-signature] under frameworks such as eIDAS 2.0. The approach utilizes a one-way cryptographic binding where the QES signs a digest of the VC as a challenge, ensuring the signer's verified identity (e.g., via KYC processes) is tied to the VC content without modifying the original VC. A new "Binding Credential"[^binding-credential] (a VC) serves as the umbrella structure, referencing the original VC and the QES-wrapped artifact via integrity-protected properties, enabling reusability, privacy-preserving measures through Selective Disclosure JSON Web Tokens (SD-JWT)[^sd-jwt] or Zero-Knowledge Proofs (ZKPs)[^zkp], and offline-compatible verification.
 
 ## Introduction
 
 Verifiable Credentials (VCs) as defined in the Verifiable Credentials Data Model 2.0 [VC-DATA-MODEL-2.0](https://www.w3.org/TR/vc-data-model-2.0/) provide a mechanism for asserting claims in a tamper-evident and privacy-respecting manner. However, in regulated environments requiring legal enforceability, such as under the European Union's eIDAS Regulation (EU) No 910/2014 and its 2.0 amendments, VCs must be bound to Qualified Electronic Signatures (QES) to achieve equivalence to handwritten signatures. This legal equivalence is established in [Article 25](https://www.legislation.gov.uk/eur/2014/910/article/25) of the regulation, which states that a qualified electronic signature shall have the equivalent legal effect of a handwritten signature.
 
-This specification introduces a one approach for achieving a one-way binding between a VC and a QES-backed identity attestation (e.g., incorporating a KYC hash). The binding ensures the VC is cryptographically approved by a verified signer without altering the VC's original signature payload. This avoids invalidation issues associated with direct modifications (e.g., adding references via [`evidence`](https://www.w3.org/TR/vc-data-model-2.0/#evidence) to the original), as any change to a signed VC's content would break the issuer's original cryptographic signature. Instead, a new Binding Credential encapsulates the references, supporting privacy enhancements via SD-JWT or ZKPs.
+This specification introduces a one approach for achieving a one-way binding between a VC and a QES-backed identity attestation (e.g., incorporating a KYC hash[^kyc-hash]). The binding ensures the VC is cryptographically approved by a verified signer without altering the VC's original signature payload. This avoids invalidation issues associated with direct modifications (e.g., adding references via [`evidence`](https://www.w3.org/TR/vc-data-model-2.0/#evidence) to the original), as any change to a signed VC's content would break the issuer's original cryptographic signature. Instead, a new Binding Credential encapsulates the references, supporting privacy enhancements via SD-JWT or ZKPs.
 
 ### Motivation
 
@@ -22,7 +22,7 @@ Traditional VC issuance, focuses on issuer signatures to attest claims about a s
 ### Scope
 
 This specification covers:
-- One-way binding via QES challenge signatures.
+- One-way binding via QES challenge signatures[^challenge-signature].
 - Enveloping via a new Binding Credential VC.
 - Privacy-preserving wrappers using SD-JWT or ZKPs.
 - Verification workflows, security, and privacy considerations.
@@ -173,16 +173,15 @@ For high-privacy, use BBS to derive a ZKP from the QES, referenced in the Bindin
 
 ## Security Considerations
 
-- **Digest Collisions**: Use collision-resistant hashes (e.g., SHA-256); RECOMMEND multihash for flexibility.
+- **Digest Collisions**: Use collision-resistant hashes (e.g., SHA-256).
 - **Replay Attacks**: Include nonces or timestamps in challenges.
 - **Certificate Revocation**: Verifiers MUST check QES status via CRL/OCSP.
-- **Key Binding**: Use KB-JWTs to prevent unauthorized presentation.
 - **Side-Channel Attacks**: Minimize metadata in references to avoid timing or correlation risks.
 
 ## Privacy Considerations
 
 - **Data Minimization**: Use SD-JWT or ZKPs to disclose only necessary claims; reference rather than embed where possible.
-- **Unlinkability**: ZKPs enable unlinkable proofs; avoid persistent identifiers in digests.
+- **Unlinkability**: ZKPs can enable unlinkable proofs, as described in cryptosuites like [VC-BBS-2023], which prevent correlation between different presentations of the same credential; avoid persistent identifiers in digests to further enhance this property.
 - **Consent**: Holders MUST control issuance and presentation; align with GDPR/eIDAS data protection.
 - **Metadata Leakage**: Use anonymous URIs if references could enable tracking.
 
@@ -205,6 +204,21 @@ This specification builds on concepts from decentralized identity labs proposals
 
 ### Informative References
 
+- [eIDAS](http://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv:OJ.L_.2014.257.01.0073.01.ENG) Regulation (EU) No 910/2014 of the European Parliament and of the Council of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market and repealing Directive 1999/93/EC.
+- [RFC7800](https://www.rfc-editor.org/rfc/rfc7800) Proof-of-Possession Key Semantics for JSON Web Tokens (JWTs). M. Jones. IETF RFC 7800.
 - [VC-BBS-2023](https://www.w3.org/community/reports/credentials/CG-FINAL-vc-di-bbs-20230405/) BBS Cryptographic Suites v0.01. W3C Draft Community Group Report.
 - [SD-JWT-VC](https://www.ietf.org/archive/id/draft-ietf-oauth-selective-disclosure-jwt-22.html) SD-JWT for Verifiable Credentials. IETF Draft.
 - [VC-DATA-INTEGRITY](https://www.w3.org/TR/vc-data-integrity/) Verifiable Credential Data Integrity 1.1. W3C Working Draft.
+
+## Terminology
+
+This section defines the terms used in this specification. A link to these terms is included whenever they appear in the document.
+
+[^verifiable-credential]: **Verifiable Credential (VC):** A tamper-evident credential that has authorship that can be cryptographically verified, as defined in [VC-DATA-MODEL-2.0](https://www.w3.org/TR/vc-data-model-2.0/).
+[^binding-credential]: **Binding Credential:** A specialized VC that references and binds an original VC to a QES artifact, serving as a reusable umbrella structure.
+[^qualified-electronic-signature]: **Qualified Electronic Signature (QES):** An advanced electronic signature created by a qualified electronic signature creation device and based on a certificate provided by a Qualified Trust Service Provider (QTSP), as per eIDAS Regulation.
+[^kyc-hash]: **KYC Hash:** A cryptographic digest (e.g., SHA-256) representing Know Your Customer (KYC) verification data, used for privacy-preserving identity attestation.
+[^challenge-signature]: **Challenge Signature**: A signature where the message signed includes a digest of another artifact (e.g., VC) as a challenge to bind the signer's identity.
+[^sd-jwt]: **Selective Disclosure JSON Web Token (SD-JWT):** A JWT format enabling selective disclosure of claims, as per [SD-JWT](https://www.ietf.org/archive/id/draft-ietf-oauth-selective-disclosure-jwt-22.html).
+[^zkp]: **Zero-Knowledge Proof (ZKP):** A cryptographic method allowing one party to prove possession of information without revealing it, e.g., via BBS signatures [VC-BBS-2023](https://www.w3.org/community/reports/credentials/CG-FINAL-vc-di-bbs-20230405/).
+[^non-repudiation]: **Non-repudiation:** By using a QTSP, advanced QES signatures guarantee enough safeguards and protections (described on Article 26) place that the entity named in the certificate cannot later repudiate—deny—actions they take with the certificate. https://www.cryptomathic.com/blog/is-non-repudiation-really-non-repudiable
