@@ -51,7 +51,7 @@ The QES MUST sign a message that includes:
 The signature format SHALL conform to eIDAS-qualified standards. The resulting QES artifact MAY include the qualified certificate chain for verification.
 
 **Algorithm**:
-1. Compute `vcDigest = hash(serialize(VC))` where `hash` is SHA-256 or a multihash.
+1. Compute `vcDigest = hash(serialize(VC))` where `hash` is SHA-256.
 2. Construct challenge message: `{ "challenge": vcDigest, "timestamp": ISO8601-time }`.
 3. Sign the message with QES: `qesSignature = signQES(challengeMessage)`.
 
