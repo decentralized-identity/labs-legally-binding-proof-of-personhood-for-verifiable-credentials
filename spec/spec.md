@@ -123,7 +123,7 @@ Verification MUST fail if any binding check mismatches.
 
 ## Examples
 
-### Usecase Sequence Diagram
+### Use case Sequence Diagram
 
 ```mermaid
 sequenceDiagram
