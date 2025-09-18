@@ -35,17 +35,6 @@ As well as sections marked as non-normative, all authoring guidelines, diagrams,
 
 The keywords MAY, MUST, MUST NOT, OPTIONAL, RECOMMENDED, REQUIRED, SHALL, SHALL NOT, SHOULD, and SHOULD NOT in this document are to be interpreted as described in BCP 14 [RFC2119](https://www.rfc-editor.org/rfc/rfc2119) when, and only when, they appear in all capitals, as shown here.
 
-## Terminology
-
-This section defines the terms used in this specification. A link to these terms is included whenever they appear in the document.
-
-- **Verifiable Credential (VC)**: A tamper-evident credential that has authorship that can be cryptographically verified, as defined in [VC-DATA-MODEL-2.0](https://www.w3.org/TR/vc-data-model-2.0/).
-- **Binding Credential**: A specialized VC that references and binds an original VC to a QES artifact, serving as a reusable umbrella structure.
-- **Qualified Electronic Signature (QES)**: An advanced electronic signature created by a qualified electronic signature creation device and based on a certificate provided by a Qualified Trust Service Provider (QTSP), as per eIDAS Regulation.
-- **KYC Hash**: A cryptographic digest (e.g., SHA-256 or multihash) representing Know Your Customer (KYC) verification data, used for privacy-preserving identity attestation.
-- **Challenge Signature**: A signature where the message signed includes a digest of another artifact (e.g., VC) as a challenge to bind the signer's identity.
-- **Selective Disclosure JSON Web Token (SD-JWT)**: A JWT format enabling selective disclosure of claims, as per [SD-JWT](https://www.ietf.org/archive/id/draft-ietf-oauth-selective-disclosure-jwt-22.html).
-- **Zero-Knowledge Proof (ZKP)**: A cryptographic method allowing one party to prove possession of information without revealing it, e.g., via BBS signatures [VC-BBS-2023](https://www.w3.org/community/reports/credentials/CG-FINAL-vc-di-bbs-20230405/).
 
 ## Binding Mechanism
 
