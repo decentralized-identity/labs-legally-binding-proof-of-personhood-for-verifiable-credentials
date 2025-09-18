@@ -51,7 +51,7 @@ This section defines the terms used in this specification. A link to these terms
 
 ### Overview
 
-The binding is one-way: The QES attests to the VC by signing its digest, tying the signer's verified identity (e.g., KYC level) to the VC content. This avoids circular dependencies and preserves the VC's immutability. The QES is wrapped for privacy and referenced in a new Binding Credential for reusability.
+The binding is one-way: The QES attests to the VC by signing its digest, tying the signer's verified identity (e.g., KYC level) to the VC content. This avoids circular dependencies—where the VC would need to reference the QES signature and the QES signature would need to reference the VC, creating a deadlock—and preserves the VC's immutability. The QES is wrapped for privacy and referenced in a new Binding Credential for reusability.
 
 ### QES Challenge Signature
 
