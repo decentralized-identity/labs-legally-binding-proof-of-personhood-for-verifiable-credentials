@@ -1,6 +1,6 @@
 # Legally-Binding Proof of Personhood for Verifiable Credentials via QES
 
-[![DIF Labs Project](https://img.shields.io/badge/DIF_Labs_Project-v1-black?style=for-the-badge&labelColor=%23000000&color=%2300ff00)](<proposal_path>)
+[![DIF Labs Project](https://img.shields.io/badge/DIF_Labs_Project-v1-black?style=for-the-badge&labelColor=%23000000&color=%2300ff00)](https://github.com/decentralized-identity/labs/blob/main/proposals/beta-cohort-2-2025/legallybinding-vcs/legallybinding-vcs.md)
 
 This proposal creates a standardized method to anchor Verifiable Credentials to legally recognized, high-assurance proof of an individual's identity through Qualified Electronic Signatures (QES). QES, recognized by eIDAS in the European Union, represent the highest level of electronic signature, carrying the same legal weight as a handwritten signature. By creating a standardized mechanism to attach a QES to any VC, we can bind that credential to the strong proof of personhood and KYC attributes inherent in the QES.
 
