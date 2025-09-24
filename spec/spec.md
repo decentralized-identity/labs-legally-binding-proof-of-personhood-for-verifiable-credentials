@@ -52,7 +52,7 @@ The signature format SHALL conform to eIDAS-qualified standards. The resulting Q
 
 **Algorithm**:
 1. Compute `vcDigest = hash(serialize(VC))` where `hash` is SHA-256.
-2. Construct challenge message: `{ "challenge": vcDigest, "timestamp": ISO8601-time }`.
+2. Construct challenge message: `{ "challenge": vcDigest, "nonce": string }`.
 3. Sign the message with QES: `qesSignature = signQES(challengeMessage)`.
 
 This creates a detached signature binding the QES holder's identity to the VC.
@@ -169,7 +169,7 @@ Consider a VC asserting a degree. The holder creates a QES signing the VC digest
 ## Security Considerations
 
 - **Digest Collisions**: Use collision-resistant hashes (e.g., SHA-256).
-- **Replay Attacks**: Include nonces or timestamps in challenges.
+- **Replay Attacks**: Include cryptographic nonce in challenge.
 - **Certificate Revocation**: Verifiers MUST check QES status via CRL/OCSP.
 - **Side-Channel Attacks**: Minimize metadata in references to avoid timing or correlation risks.
 
