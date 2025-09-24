@@ -152,7 +152,7 @@ sequenceDiagram
     Note over Alice,Platform: QES-VC Issuance
     Platform->>Platform: Compute digest of Original VC
     Platform->>QESProvider: Sign challenge (Original VC digest) using QES
-    Platform->>Platform: Wrap QES artifact in privacy layer (SD-JWT or ZKP)<br>Asserting KYC and binding to document
+    Platform->>Platform: Wrap QES artifact in privacy layer (SD-JWT)<br>Asserting KYC and binding to document
     Platform->>Alice: Confirms process complete and issues resulting QES VC
 
     opt Future Verification
@@ -165,10 +165,6 @@ sequenceDiagram
 ### Basic Binding Example (Non-Normative)
 
 Consider a VC asserting a degree. The holder creates a QES signing the VC digest, wraps it in SD-JWT, and issues a Binding Credential referencing both for presentation to an employer.
-
-### ZKP-Enhanced Binding (Non-Normative)
-
-For high-privacy, use BBS to derive a ZKP from the QES, referenced in the Binding Credential's `evidence`, proving "valid QES over this VC digest."
 
 ## Security Considerations
 
