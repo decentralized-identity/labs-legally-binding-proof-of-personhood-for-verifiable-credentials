@@ -1,0 +1,313 @@
+
+        <!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+            <title>Legally-Binding Proof of Personhood for Verifiable Credentials via QES</title>
+            <link href="./spec-up/css/custom-elements.css" rel="stylesheet">
+            <link href="./spec-up/css/prism.css" rel="stylesheet">
+            <link href="./spec-up/css/chart.css" rel="stylesheet">
+            <link href="./spec-up/css/font-awesome.css" rel="stylesheet">
+            <link href="./spec-up/css/index.css" rel="stylesheet">
+            <script src="./spec-up/js/custom-elements.js"></script>
+          </head>
+          <body features="source logo">
+            
+            <svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="github" viewBox="0 0 20 20">
+    <path d="M10 0.247c-5.522 0-10 4.477-10 10 0 4.418 2.865 8.167 6.839 9.489 0.5 0.093 0.683-0.217 0.683-0.481 0-0.238-0.009-1.026-0.014-1.862-2.782 0.605-3.369-1.18-3.369-1.18-0.455-1.156-1.11-1.463-1.11-1.463-0.907-0.621 0.069-0.608 0.069-0.608 1.004 0.071 1.533 1.031 1.533 1.031 0.892 1.529 2.339 1.087 2.91 0.831 0.090-0.646 0.349-1.087 0.635-1.337-2.221-0.253-4.556-1.11-4.556-4.942 0-1.092 0.391-1.984 1.030-2.684-0.104-0.252-0.446-1.269 0.097-2.646 0 0 0.84-0.269 2.751 1.025 0.798-0.222 1.653-0.333 2.503-0.337 0.85 0.004 1.706 0.115 2.505 0.337 1.909-1.294 2.747-1.025 2.747-1.025 0.544 1.378 0.202 2.395 0.098 2.646 0.641 0.7 1.029 1.592 1.029 2.684 0 3.841-2.339 4.687-4.566 4.934 0.359 0.31 0.678 0.919 0.678 1.852 0 1.338-0.012 2.415-0.012 2.744 0 0.266 0.18 0.578 0.687 0.48 3.971-1.324 6.833-5.071 6.833-9.488 0-5.523-4.477-10-10-10z"></path>
+  </symbol>
+  <symbol id="nested_list" viewBox="0 0 37 32">
+    <path d="M0 2.286c0-1.262 1.023-2.286 2.286-2.286s2.286 1.023 2.286 2.286c0 1.262-1.023 2.286-2.286 2.286s-2.286-1.023-2.286-2.286zM9.143 0h27.429v4.571h-27.429zM9.143 11.429c0-1.262 1.023-2.286 2.286-2.286s2.286 1.023 2.286 2.286c0 1.262-1.023 2.286-2.286 2.286s-2.286-1.023-2.286-2.286zM18.286 9.143h18.286v4.571h-18.286zM9.143 29.714c0-1.262 1.023-2.286 2.286-2.286s2.286 1.023 2.286 2.286c0 1.262-1.023 2.286-2.286 2.286s-2.286-1.023-2.286-2.286zM18.286 27.429h18.286v4.571h-18.286zM18.286 20.571c0-1.262 1.023-2.286 2.286-2.286s2.286 1.023 2.286 2.286c0 1.262-1.023 2.286-2.286 2.286s-2.286-1.023-2.286-2.286zM27.429 18.286h9.143v4.571h-9.143z"></path>
+  </symbol>
+</svg>
+
+            <main>
+
+              <header id="header" class="panel-header">
+                <span id="toc_toggle" panel-toggle="toc">
+                  <svg icon><use xlink:href="#nested_list"></use></svg>
+                </span>
+                <a id="logo" href="https://identity.foundation">
+                  <img src="https://rawcdn.githack.com/decentralized-identity/decentralized-identity.github.io/a3ca39717e440302d1fd99a796e7f00e1c42eb2d/images/logo-flat.svg" />
+                </a>
+                <span issue-count animate panel-toggle="repo_issues">
+                  <svg icon><use xlink:href="#github"></use></svg>
+                </span>
+              </header>
+
+              <article id="content">
+                <h1 id="legally-binding-proof-of-personhood-for-verifiable-credentials-via-qes"><a class="toc-anchor" href="#legally-binding-proof-of-personhood-for-verifiable-credentials-via-qes">§</a> Legally-Binding Proof of Personhood for Verifiable Credentials via QES</h1>
+<div id="warning-1" class="notice warning"><a class="notice-link" href="#warning-1">WARNING</a><p>FIRST, VERY ROUGH DRAFT.</p>
+</div>
+<h2 id="abstract"><a class="toc-anchor" href="#abstract">§</a> Abstract</h2>
+<p>This specification defines a mechanism for creating legally binding Verifiable Credentials (VCs)<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup> by binding them to Qualified Electronic Signatures (QES)<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup> under frameworks such as eIDAS 2.0. The approach utilizes a one-way cryptographic binding where the QES signs a digest of the VC as a challenge, ensuring the signer’s verified identity (e.g., via KYC processes) is tied to the VC content without modifying the original VC. A new “Binding Credential”<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup> (a VC) serves as the umbrella structure, embedding the original VC as attachment and the QES-wrapped artifact via integrity-protected properties, enabling reusability, privacy-preserving measures through Selective Disclosure JSON Web Tokens (SD-JWT)<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup>.</p>
+<h2 id="introduction"><a class="toc-anchor" href="#introduction">§</a> Introduction</h2>
+<p>Verifiable Credentials (VCs) as defined in the Verifiable Credentials Data Model 2.0 <a href="https://www.w3.org/TR/vc-data-model-2.0/">VC-DATA-MODEL-2.0</a> provide a mechanism for asserting claims in a tamper-evident and privacy-respecting manner. However, in regulated environments requiring legal enforceability, such as under the European Union’s eIDAS Regulation (EU) No 910/2014 and its 2.0 amendments, VCs must be bound to Qualified Electronic Signatures (QES) to achieve equivalence to handwritten signatures. This legal equivalence is established in <a href="https://www.legislation.gov.uk/eur/2014/910/article/25">Article 25</a> of the regulation, which states that a qualified electronic signature shall have the equivalent legal effect of a handwritten signature.</p>
+<p>This specification introduces a one approach for achieving a one-way binding between a VC and a QES-backed identity attestation (e.g., incorporating a KYC hash<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup>). The binding ensures the VC is cryptographically approved by a verified signer without altering the VC’s original signature payload. This avoids invalidation issues associated with direct modifications (e.g., adding references via <a href="https://www.w3.org/TR/vc-data-model-2.0/#evidence"><code>evidence</code></a> to the original), as any change to a signed VC’s content would break the issuer’s original cryptographic signature. Instead, a new Binding Credential encapsulates the original VC, and adds the QES-related fields supporting privacy enhancements via SD-JWT.</p>
+<h3 id="motivation"><a class="toc-anchor" href="#motivation">§</a> Motivation</h3>
+<p>Traditional VC issuance, focuses on issuer signatures to attest claims about a subject, but lacks inherent mechanisms for the holder to make their own legally-binding commitments related to the credential. In scenarios like contracts, attestations, or access rights, binding a VC to a QES provides non-repudiation<sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup> of both KYC and legal validity. These properties are established by the eIDAS Regulation, where <a href="https://www.legislation.gov.uk/eur/2014/910/article/25">Article 25</a> guarantees legal validity and <a href="https://www.legislation.gov.uk/eur/2014/910/article/26">Article 26</a>’s requirements for signature creation provide the safeguards to guarantee non-repudiation. The goal of this spec is to define a standard procedure and packaging format using QES to sign VC digests for binding, with privacy wrappers to minimize data exposure. This specification formalizes that into a method aligned with emerging standards like SD-JWT for Verifiable Credentials <a href="https://www.ietf.org/archive/id/draft-ietf-oauth-selective-disclosure-jwt-22.html">SD-JWT-VC</a> and eIDAS 2.0 wallet integrations, using a reusable VC structure for persistence.</p>
+<h3 id="scope"><a class="toc-anchor" href="#scope">§</a> Scope</h3>
+<p>This specification covers:</p>
+<ul>
+<li>One-way binding via QES challenge signatures<sup class="footnote-ref"><a href="#fn7" id="fnref7">[7]</a></sup>.</li>
+<li>Enveloping via a new Binding Credential VC.</li>
+<li>Privacy-preserving wrappers using SD-JWT.</li>
+<li>Verification workflows, security, and privacy considerations.</li>
+</ul>
+<p>Out of scope: Multi-party signatures, dynamic proof requests (e.g., via DIDComm), or non-eIDAS signature schemes.</p>
+<h3 id="conformance"><a class="toc-anchor" href="#conformance">§</a> Conformance</h3>
+<p>As well as sections marked as non-normative, all authoring guidelines, diagrams, examples, and notes in this specification are non-normative. Everything else in this specification is normative.</p>
+<p>The keywords MAY, MUST, MUST NOT, OPTIONAL, RECOMMENDED, REQUIRED, SHALL, SHALL NOT, SHOULD, and SHOULD NOT in this document are to be interpreted as described in BCP 14 <a href="https://www.rfc-editor.org/rfc/rfc2119">RFC2119</a> when, and only when, they appear in all capitals, as shown here.</p>
+<h2 id="binding-mechanism"><a class="toc-anchor" href="#binding-mechanism">§</a> Binding Mechanism</h2>
+<h3 id="overview"><a class="toc-anchor" href="#overview">§</a> Overview</h3>
+<p>The binding is one-way: The QES attests to the VC by signing its digest, tying the signer’s verified identity (e.g., KYC level) to the VC content. This avoids circular dependencies—where the VC would need to reference the QES signature and the QES signature would need to reference the VC, creating a deadlock—and preserves the VC’s immutability. The QES is wrapped for privacy and referenced in a new Binding Credential for reusability.</p>
+<h3 id="qes-challenge-signature"><a class="toc-anchor" href="#qes-challenge-signature">§</a> QES Challenge Signature</h3>
+<p>The QES MUST sign a message that includes:</p>
+<ul>
+<li>The digest of the VC JSON payload (e.g., using SHA-256).</li>
+<li>Optional metadata (e.g., timestamp, intent like “approve VC”).</li>
+</ul>
+<p>The signature format SHALL conform to eIDAS-qualified standards. The resulting QES artifact MAY include the qualified certificate chain for verification.</p>
+<p><strong>Algorithm</strong>:</p>
+<ol>
+<li>Compute <code>vcDigest = hash(serialize(VC))</code> where <code>hash</code> is SHA-256.</li>
+<li>Construct challenge message: <code>{ &quot;challenge&quot;: vcDigest, &quot;nonce&quot;: string }</code>.</li>
+<li>Sign the message with QES: <code>qesSignature = signQES(challengeMessage)</code>.</li>
+</ol>
+<p>This creates a detached signature binding the QES holder’s identity to the VC.</p>
+<h3 id="privacy-wrappers"><a class="toc-anchor" href="#privacy-wrappers">§</a> Privacy Wrappers</h3>
+<p>To preserve privacy, the QES artifact SHALL be wrapped as:</p>
+<ul>
+<li><strong>SD-JWT</strong>: Encode QES details (e.g., certificate thumbprint, signed challenge) with selective disclosure claims (e.g., <code>_sd</code> for hidden attributes). The SD-JWT MAY include a Key Binding JWT (KB-JWT) to prove holder possession.</li>
+</ul>
+<p>Wrappers MUST NOT expose unnecessary identity details, adhering to data minimization principles.</p>
+<h3 id="umbrella-structure-binding-credential"><a class="toc-anchor" href="#umbrella-structure-binding-credential">§</a> Umbrella Structure: Binding Credential</h3>
+<p>The umbrella SHALL be a new VC conforming to <a href="https://www.w3.org/TR/vc-data-model-2.0/">VC-DATA-MODEL-2.0</a>, termed a Binding Credential:</p>
+<ul>
+<li><code>type</code>: [“VerifiableCredential”, “BindingCredential”] (extension type RECOMMENDED).</li>
+<li><code>evidence</code>: An array of objects, each referencing:
+<ul>
+<li>The original VC (via URI, with <code>digestMultibase</code> for integrity).</li>
+<li>The privacy-wrapped QES artifact (via URI or embedded as a data URI, with digest).</li>
+</ul>
+</li>
+<li>Alternatively, use <code>relatedResource</code> for external integrity-protected references.</li>
+<li>Signed by the holder or a trusted issuer using a securing mechanism (e.g., JOSE for JWT/SD-JWT or DataIntegrityProof).</li>
+</ul>
+<p>This structure ensures reusability, as the Binding Credential can be stored and presented like any VC.</p>
+<p><strong>Example (JSON) – TO BE UPDATED</strong>:</p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"@context"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"https://www.w3.org/ns/credentials/v2"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"type"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"VerifiableCredential"</span><span class="token punctuation">,</span> <span class="token string">"BindingCredential"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"http://example.com/bindings/123"</span><span class="token punctuation">,</span>
+  <span class="token property">"issuer"</span><span class="token operator">:</span> <span class="token string">"did:example:holder"</span><span class="token punctuation">,</span>
+  <span class="token property">"credentialSubject"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"did:example:subject"</span><span class="token punctuation">,</span>
+    <span class="token property">"bindingDescription"</span><span class="token operator">:</span> <span class="token string">"QES-bound University Degree"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"evidence"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"VerifiableCredentialReference"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"http://example.edu/credentials/3732"</span><span class="token punctuation">,</span>
+      <span class="token property">"digestMultibase"</span><span class="token operator">:</span> <span class="token string">"z01... (multihash of original VC)"</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"QESArtifact"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"data:application/sd-jwt;base64,... (wrapped QES)"</span><span class="token punctuation">,</span>
+      <span class="token property">"digestMultibase"</span><span class="token operator">:</span> <span class="token string">"z01... (multihash of QES wrapper)"</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"proof"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"JsonWebSignature2020"</span><span class="token punctuation">,</span>
+    <span class="token comment">// ... signature details</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="verification-workflow"><a class="toc-anchor" href="#verification-workflow">§</a> Verification Workflow</h2>
+<p>Verifiers SHALL:</p>
+<ol>
+<li>Validate the Binding Credential’s signature.</li>
+<li>Fetch/resolve references in <code>evidence</code> or <code>relatedResource</code>.</li>
+<li>Verify the original VC signature and match its digest.</li>
+<li>Extract the wrapped QES artifact and verify:
+<ul>
+<li>The QES signature over the challenge.</li>
+<li>That the challenge matches the VC digest.</li>
+<li>QES certificate validity (e.g., via OCSP).</li>
+</ul>
+</li>
+<li>Process SD-JWT disclosures.</li>
+</ol>
+<p>Verification MUST fail if any binding check mismatches.</p>
+<h2 id="examples"><a class="toc-anchor" href="#examples">§</a> Examples</h2>
+<h3 id="use-case-sequence-diagram"><a class="toc-anchor" href="#use-case-sequence-diagram">§</a> Use case Sequence Diagram</h3>
+<div class="mermaid">
+sequenceDiagram
+    participant Alice as Alice (User/Holder)
+    participant Platform as Signing Platform (VC supporting)
+    participant QESProvider as QTSP (e.g., eIDAS)
+    participant Verifier as Verifier (Optional)
+
+    Note over Alice,Platform: Alice needs to sign an uploaded document on the platform
+
+    Alice->>Platform: Access platform and upload document (e.g., PDF)
+    Platform->>Alice: Confirm upload and present document for review
+    Platform->>Alice: Request KYC verification and document signature
+
+    Note over Alice: Alice uses QES for KYC and signing the document
+
+    Platform->>QESProvider: Request QES issuance/activation (with KYC hash/confirmation)
+    QESProvider->>Alice: Provide QES certificate and signing capability (confirms KYC level)
+
+    Platform->>Platform: Compute digest of uploaded document
+    Platform->>QESProvider: Sign challenge (document digest) using QES
+    QESProvider->>Platform: Return QES-signed challenge (detached signature)
+
+    Note over Alice,Platform: Original VC Issuance
+    Platform->>Alice: Issues VC of Document Signing backed by QES
+
+    Note over Alice,Platform: QES-VC Issuance
+    Platform->>Platform: Compute digest of Original VC
+    Platform->>QESProvider: Sign challenge (Original VC digest) using QES
+    Platform->>Platform: Wrap QES artifact in privacy layer (SD-JWT)<br>Asserting KYC and binding to document
+    Platform->>Alice: Confirms process complete and issues resulting QES VC
+
+    opt Future Verification
+        Platform->>Verifier: Share resulting VC
+        Verifier->>Verifier: Perform verification workflow
+        Verifier->>Platform: Confirmation
+    end
+</div>
+<h3 id="basic-binding-example-non-normative"><a class="toc-anchor" href="#basic-binding-example-non-normative">§</a> Basic Binding Example (Non-Normative)</h3>
+<p>Consider a VC asserting a degree. The holder creates a QES signing the VC digest, wraps it in SD-JWT, and issues a Binding Credential referencing both for presentation to an employer.</p>
+<h2 id="security-considerations"><a class="toc-anchor" href="#security-considerations">§</a> Security Considerations</h2>
+<ul>
+<li><strong>Digest Collisions</strong>: Use collision-resistant hashes (e.g., SHA-256).</li>
+<li><strong>Replay Attacks</strong>: Include cryptographic nonce in challenge.</li>
+<li><strong>Certificate Revocation</strong>: Verifiers MUST check QES status via CRL/OCSP.</li>
+<li><strong>Side-Channel Attacks</strong>: Minimize metadata in references to avoid timing or correlation risks.</li>
+</ul>
+<h2 id="privacy-considerations"><a class="toc-anchor" href="#privacy-considerations">§</a> Privacy Considerations</h2>
+<ul>
+<li><strong>Data Minimization</strong>: Use SD-JWT to disclose only necessary claims; reference rather than embed where possible.</li>
+<li><strong>Consent</strong>: Holders MUST control issuance and presentation; align with GDPR/eIDAS data protection.</li>
+<li><strong>Metadata Leakage</strong>: Use anonymous URIs if references could enable tracking.</li>
+</ul>
+<h2 id="iana-considerations"><a class="toc-anchor" href="#iana-considerations">§</a> IANA Considerations</h2>
+<p>This document has no IANA actions.</p>
+<h2 id="acknowledgements"><a class="toc-anchor" href="#acknowledgements">§</a> Acknowledgements</h2>
+<p>This specification builds on concepts from decentralized identity labs proposals for beta-cohort-2-2025, incorporating feedback on QES-VC bindings and structure reusability.</p>
+<h2 id="references"><a class="toc-anchor" href="#references">§</a> References</h2>
+<h3 id="normative-references"><a class="toc-anchor" href="#normative-references">§</a> Normative References</h3>
+<ul>
+<li><a href="https://www.w3.org/TR/vc-data-model-2.0/">VC-DATA-MODEL-2.0</a> Verifiable Credentials Data Model v2.0. W3C Recommendation.</li>
+<li><a href="https://www.ietf.org/archive/id/draft-ietf-oauth-selective-disclosure-jwt-22.html">SD-JWT</a> Selective Disclosure for JWTs. IETF Draft.</li>
+<li><a href="https://www.rfc-editor.org/rfc/rfc2119">RFC2119</a> Key words for use in RFCs to Indicate Requirement Levels.</li>
+<li><a href="https://www.rfc-editor.org/rfc/rfc8174">RFC8174</a> Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words.</li>
+</ul>
+<h3 id="informative-references"><a class="toc-anchor" href="#informative-references">§</a> Informative References</h3>
+<ul>
+<li><a href="http://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv:OJ.L_.2014.257.01.0073.01.ENG">eIDAS</a> Regulation (EU) No 910/2014 of the European Parliament and of the Council of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market and repealing Directive 1999/93/EC.</li>
+<li><a href="https://www.rfc-editor.org/rfc/rfc7800">RFC7800</a> Proof-of-Possession Key Semantics for JSON Web Tokens (JWTs). M. Jones. IETF RFC 7800.</li>
+<li><a href="https://www.ietf.org/archive/id/draft-ietf-oauth-selective-disclosure-jwt-22.html">SD-JWT-VC</a> SD-JWT for Verifiable Credentials. IETF Draft.</li>
+<li><a href="https://www.w3.org/TR/vc-data-integrity/">VC-DATA-INTEGRITY</a> Verifiable Credential Data Integrity 1.1. W3C Working Draft.</li>
+</ul>
+<h2 id="terminology"><a class="toc-anchor" href="#terminology">§</a> Terminology</h2>
+<p>This section defines the terms used in this specification. A link to these terms is included whenever they appear in the document.</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><strong>Verifiable Credential (VC):</strong> A tamper-evident credential that has authorship that can be cryptographically verified, as defined in <a href="https://www.w3.org/TR/vc-data-model-2.0/">VC-DATA-MODEL-2.0</a>. <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><strong>Qualified Electronic Signature (QES):</strong> An advanced electronic signature created by a qualified electronic signature creation device and based on a certificate provided by a Qualified Trust Service Provider (QTSP), as per eIDAS Regulation. <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p><strong>Binding Credential:</strong> A specialized VC that references and binds an original VC to a QES artifact, serving as a reusable umbrella structure. <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p><strong>Selective Disclosure JSON Web Token (SD-JWT):</strong> A JWT format enabling selective disclosure of claims, as per <a href="https://www.ietf.org/archive/id/draft-ietf-oauth-selective-disclosure-jwt-22.html">SD-JWT</a>. <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p><strong>KYC Hash:</strong> A cryptographic digest (e.g., SHA-256) representing Know Your Customer (KYC) verification data, used for privacy-preserving identity attestation. <a href="#fnref5" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn6" class="footnote-item"><p><strong>Non-repudiation:</strong> By using a QTSP, advanced QES signatures guarantee enough safeguards and protections (described on Article 26) place that the entity named in the certificate cannot later repudiate—deny—actions they take with the certificate. <a href="https://www.cryptomathic.com/blog/is-non-repudiation-really-non-repudiable">https://www.cryptomathic.com/blog/is-non-repudiation-really-non-repudiable</a> <a href="#fnref6" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn7" class="footnote-item"><p><strong>Challenge Signature</strong>: A signature where the message signed includes a digest of another artifact (e.g., VC) as a challenge to bind the signer’s identity. <a href="#fnref7" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+              </article>    
+
+            </main>
+
+            <slide-panels id="slidepanels">
+              <slide-panel id="repo_issues" options="right">
+                <header class="panel-header">
+                  <span>
+                    <svg icon><use xlink:href="#github"></use></svg>
+                    <span issue-count></span>
+                  </span>
+                  <span class="repo-issue-toggle" panel-toggle="repo_issues">✕</span>
+                </header>
+                <ul id="repo_issue_list"></ul>
+              </slide-panel>
+
+              <slide-panel id="toc">
+                <header class="panel-header">
+                  <span>Table of Contents</span>
+                  <span panel-toggle="toc">✕</span>
+                </header>
+                <div id="toc_list">
+                  <ul class="toc">
+<li><a href="#abstract">Abstract</a></li>
+<li><a href="#introduction">Introduction</a>
+<ul>
+<li><a href="#motivation">Motivation</a></li>
+<li><a href="#scope">Scope</a></li>
+<li><a href="#conformance">Conformance</a></li>
+</ul>
+</li>
+<li><a href="#binding-mechanism">Binding Mechanism</a>
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#qes-challenge-signature">QES Challenge Signature</a></li>
+<li><a href="#privacy-wrappers">Privacy Wrappers</a></li>
+<li><a href="#umbrella-structure-binding-credential">Umbrella Structure: Binding Credential</a></li>
+</ul>
+</li>
+<li><a href="#verification-workflow">Verification Workflow</a></li>
+<li><a href="#examples">Examples</a>
+<ul>
+<li><a href="#use-case-sequence-diagram">Use case Sequence Diagram</a></li>
+<li><a href="#basic-binding-example-non-normative">Basic Binding Example (Non-Normative)</a></li>
+</ul>
+</li>
+<li><a href="#security-considerations">Security Considerations</a></li>
+<li><a href="#privacy-considerations">Privacy Considerations</a></li>
+<li><a href="#iana-considerations">IANA Considerations</a></li>
+<li><a href="#acknowledgements">Acknowledgements</a></li>
+<li><a href="#references">References</a>
+<ul>
+<li><a href="#normative-references">Normative References</a></li>
+<li><a href="#informative-references">Informative References</a></li>
+</ul>
+</li>
+<li><a href="#terminology">Terminology</a></li>
+</ul>
+
+                </div>
+              </slide-panel>
+              
+            </slide-panels>
+
+          </body>
+          <script>window.specConfig = {"title":"Legally-Binding Proof of Personhood for Verifiable Credentials via QES","spec_directory":"./spec/","output_path":"./","markdown_paths":["spec.md"],"logo":"https://rawcdn.githack.com/decentralized-identity/decentralized-identity.github.io/a3ca39717e440302d1fd99a796e7f00e1c42eb2d/images/logo-flat.svg","logo_link":"https://identity.foundation","source":{"host":"github","account":"decentralized-identity","repo":"labs-legally-binding-proof-of-personhood-for-verifiable-credentials"},"destination":"./","rootResourcePrefix":"./","destinationResourcePrefix":"./"}</script>
+          <script src="./spec-up/js/markdown-it.js"></script>
+          <script src="./spec-up/js/prism.js" data-manual></script>
+          <script src="./spec-up/js/mermaid.js"></script>
+          <script src="./spec-up/js/chart.js"></script>
+          <script src="./spec-up/js/index.js"></script>
+        </html>
+      
